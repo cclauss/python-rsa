@@ -7,20 +7,40 @@ cache: pip
 
 python:
   - "3.6"
+<<<<<<< HEAD
   - "3.7"
 
 matrix:
   include:
     - python: 3.5
       dist: xenial  # Bionic has no Python 3.5
+=======
+>>>>>>> e858caa... Travis CI: Upgrade to production Py37 and run flake8
 
     # Disabled, see https://github.com/sybrenstuvel/python-rsa/issues/131
     #- python: pypy3.5
     #  dist: xenial  # Bionic has no Python 3.5
 
+matrix:
+  include:
+    - python: 3.7
+      dist: xenial    # required for Python >= 3.7 (travis-ci/travis-ci#9069)
+
 install:
+<<<<<<< HEAD
   - pip install poetry
   - poetry install -v
+=======
+  - pip install pipenv
+  - pipenv install --dev
+  - pip install flake8
+
+before_script:
+  # stop the build if there are Python syntax errors or undefined names
+  - flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics
+  # exit-zero treats all errors as warnings.  The GitHub editor is 127 chars wide
+  - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+>>>>>>> e858caa... Travis CI: Upgrade to production Py37 and run flake8
 
 script:
   - poetry run py.test tests/
